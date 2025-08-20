@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { Button, Input } from "../../shared";
-// import { authClient } from "../../lib/auth-client";
-// import toast from "react-hot-toast";
 import { useValidateSignUp } from "../../hooks";
 
 const Home = () => {
