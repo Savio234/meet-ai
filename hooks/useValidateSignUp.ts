@@ -1,77 +1,68 @@
-import React from 'react';
-import { authClient } from '../lib/auth-client';
+"use client";
+import { useState } from 'react';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { authClient } from "../lib/auth-client";
+import { useRouter } from "next/navigation";
 import toast from 'react-hot-toast';
-import { ErrorContext, RequestContext, SuccessContext } from 'better-auth/react';
+import { ErrorContext, SuccessContext } from 'better-auth/react';
 
-interface useValidateSignUpProps {
-    name: string;
-    email: string;
-    password: string;
-    setName: React.Dispatch<React.SetStateAction<string>>;
-    setEmail: React.Dispatch<React.SetStateAction<string>>;
-    setPassword: React.Dispatch<React.SetStateAction<string>>;
-}
-
-const useValidateSignUp = ({ name, email, password, setName, setEmail, setPassword }: useValidateSignUpProps) => {
-  const { data: session, isPending } = authClient.useSession();
-  const handleSignOut = () => {
-    authClient.signOut()
-  }
-//   const signOut = authClient.signOut();
-    const handleSignUp = async () => {
+const useValidateSignUp = () => {
+    const router = useRouter();
+    const [error, setError] = useState<string | null>(null);
+    const [pending, setPending] = useState<boolean>(false);
+    const { data: session } = authClient.useSession();
+    const signUpSchema = z.object({
+        name: z.string().min(1, "Name is required"),
+        email: z.string().email("Invalid email address"),
+        password: z.string().min(1, "Password is required").nonempty("Password is required"),
+        confirmPassword: z.string().min(1, "Password is required").nonempty("Password is required"),
+    }).refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+    });
+    const handleSignOut = () => {
+        authClient.signOut()
+    }
+    const form = useForm<z.infer<typeof signUpSchema>>({
+        resolver: zodResolver(signUpSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+        },
+    });
+    const handleSignUp = async (data: z.infer<typeof signUpSchema>) => {
+        setError(null);
+        setPending(true);
         await authClient.signUp.email({
-            name,
-            email,
-            password
+            name: data?.name,
+            email: data?.email,
+            password: data?.password,
         }, {
-            onRequest: (ctx: RequestContext) => {
-                // toast.loading("Creating user...");
-                toast.remove();
-                console.log("Request context:", ctx);
-            },
             onSuccess: (ctx: SuccessContext) => {
                 toast.success("User created successfully");
+                router.push("/");
                 console.log("Success context:", ctx);
-                setName("");
-                setEmail("");
-                setPassword("");
+                setPending(false);
             },
-            onError: (ctx: ErrorContext) => {
-                toast.error(ctx?.error?.message);
+            onError: (error: ErrorContext) => {
                 toast.remove();
-            },
-        })
-    }
-    const handleLogin = async () => {
-        await authClient.signIn.email({
-            email,
-            password
-        }, {
-            onRequest: (ctx: RequestContext) => {
-                console.log("Request context:", ctx);
-                // toast.loading("Logging in...");
-                toast.remove();
-            },
-            onSuccess: (ctx: SuccessContext) => {
-                console.log("Success context:", ctx);
-                toast.success("Login successful");
-                setEmail("");
-                setPassword("");
-            },
-            onError: (ctx: ErrorContext) => {
-                toast.error(ctx?.error?.message);
-                toast.remove();
+                setError(error.error.message);
+                toast.error(error.error.message);
             },
         })
     }
 
   return {
     handleSignUp,
-    handleLogin,
     session,
-    // signOut,
     handleSignOut,
-    isPending,
+    form,
+    error,
+    pending,
   }
 }
 
