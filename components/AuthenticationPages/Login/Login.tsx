@@ -5,11 +5,12 @@ import { Card, CardContent, Input, Button, Form, FormControl, FormLabel,
 } from "../../../shared";
 import { OctagonAlertIcon } from "lucide-react";
 import { useValidateLogin } from "../../../hooks";
+import { FaGoogle, FaGithub } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 
 const Login = () => {
-    const { form, handleLogin, error, pending } = useValidateLogin();
+    const { form, handleLogin, error, pending, handleGithubLogin, handleGoogleLogin } = useValidateLogin();
   return (
     <div className="flex flex-col gap-6">
         <Card className="overflow-hidden p-0">
@@ -71,13 +72,15 @@ const Login = () => {
                                 </span>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <Button disabled={pending} variant="outline" type="button" className="w-full">
-                                    {/* <Image src="/svgs/google.svg" alt="Google" width={20} height={20} /> */}
-                                    Google
+                                <Button onClick={handleGoogleLogin} disabled={pending} variant="outline"
+                                    type="button" className="w-full"
+                                >
+                                    <FaGoogle />
                                 </Button>
-                                <Button disabled={pending} variant="outline" type="button" className="w-full">
-                                    {/* <Image src="/svgs/github.svg" alt="GitHub" width={20} height={20} /> */}
-                                    GitHub
+                                <Button onClick={handleGithubLogin} disabled={pending} variant="outline"
+                                    type="button" className="w-full"
+                                >
+                                    <FaGithub />
                                 </Button>
                             </div>
                             <div className="text-center text-sm">

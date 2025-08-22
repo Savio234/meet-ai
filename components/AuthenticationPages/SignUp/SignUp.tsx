@@ -3,13 +3,14 @@ import React from "react";
 import { Card, CardContent, Input, Button, Form, FormControl, FormLabel,
     FormMessage, FormField, FormItem, Alert, AlertTitle
 } from "../../../shared";
+import { FaGoogle, FaGithub } from "react-icons/fa";
 import { OctagonAlertIcon } from "lucide-react";
 import { useValidateSignUp } from "../../../hooks";
 import Link from "next/link";
 import Image from "next/image";
 
 const SignUp = () => {
-    const { handleSignUp, form, error, pending } = useValidateSignUp();
+    const { handleSignUp, handleGithubSignUp, form, error, pending, handleGoogleSignUp } = useValidateSignUp();
   return (
     <div className="flex flex-col gap-6">
         <Card className="overflow-hidden p-0">
@@ -101,13 +102,15 @@ const SignUp = () => {
                                 </span>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <Button disabled={pending} variant="outline" type="button" className="w-full">
-                                    {/* <Image src="/svgs/google.svg" alt="Google" width={20} height={20} /> */}
-                                    Google
+                                <Button onClick={handleGoogleSignUp} disabled={pending} variant="outline"
+                                    type="button" className="w-full"
+                                >
+                                    <FaGoogle />
                                 </Button>
-                                <Button disabled={pending} variant="outline" type="button" className="w-full">
-                                    {/* <Image src="/svgs/github.svg" alt="GitHub" width={20} height={20} /> */}
-                                    GitHub
+                                <Button onClick={handleGithubSignUp} disabled={pending} variant="outline"
+                                    type="button" className="w-full"
+                                >
+                                    <FaGithub />
                                 </Button>
                             </div>
                             <div className="text-center text-sm">

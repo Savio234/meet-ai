@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { authClient } from "../lib/auth-client";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import { ErrorContext, SuccessContext } from "better-auth/react";
+import toast from "react-hot-toast";
 
 const useValidateLogin = () => {
     const router = useRouter();
@@ -43,7 +43,7 @@ const useValidateLogin = () => {
         setPending(true);
         authClient.signIn.email({
             email: data?.email,
-            password: data?.password
+            password: data?.password,
         }, {
             onSuccess: (ctx: SuccessContext) => {
                 toast.success("Login successful");
@@ -58,11 +58,48 @@ const useValidateLogin = () => {
             }
         })
     };
+    const handleGithubLogin = () => {
+        setPending(true);
+        authClient.signIn.social({
+            provider: "github",
+            callbackURL: '/',
+        }, 
+        {
+            onSuccess: (ctx: SuccessContext) => {
+                console.log("Login successful:", ctx.data);
+                setPending(false);
+            },
+            onError: (error: ErrorContext) => {
+                setError(error.error.message);
+                toast.error(error.error.message);
+            }
+        }
+        )
+    }
+    const handleGoogleLogin = () => {
+        setPending(true);
+        authClient.signIn.social({
+            provider: "google",
+            callbackURL: '/',
+        },
+        {
+            onSuccess: (ctx: SuccessContext) => {
+                console.log("Login successful:", ctx.data);
+                setPending(false);
+            },
+            onError: (error: ErrorContext) => {
+                setError(error.error.message);
+                toast.error(error.error.message);
+            }
+        })
+    }
   return {
     form,
     handleLogin,
     error,
     pending,
+    handleGithubLogin,
+    handleGoogleLogin,
   }
 }
 

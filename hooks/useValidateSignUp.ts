@@ -23,7 +23,14 @@ const useValidateSignUp = () => {
         path: ["confirmPassword"],
     });
     const handleSignOut = () => {
-        authClient.signOut()
+        authClient.signOut({
+            fetchOptions: {
+                onSuccess: (ctx: SuccessContext) => {
+                    router.push("/login");
+                    console.log("Sign out successful:", ctx.data);
+                }
+            }
+        })
     }
     const form = useForm<z.infer<typeof signUpSchema>>({
         resolver: zodResolver(signUpSchema),
@@ -55,6 +62,38 @@ const useValidateSignUp = () => {
             },
         })
     }
+    const handleGithubSignUp = () => {
+        setPending(true);
+        authClient.signIn.social({
+            provider: "github",
+            callbackURL: '/',
+        },{
+            onSuccess: (ctx: SuccessContext) => {
+                console.log("Login successful:", ctx.data);
+                setPending(false);
+            },
+            onError: (error: ErrorContext) => {
+                setError(error.error.message);
+                toast.error(error.error.message);
+            }
+        })
+    }
+    const handleGoogleSignUp = () => {
+        setPending(true);
+        authClient.signIn.social({
+            provider: "google",
+            callbackURL: '/',
+        },{
+            onSuccess: (ctx: SuccessContext) => {
+                console.log("Login successful:", ctx.data);
+                setPending(false);
+            },
+            onError: (error: ErrorContext) => {
+                setError(error.error.message);
+                toast.error(error.error.message);
+            }
+        })
+    }
 
   return {
     handleSignUp,
@@ -63,6 +102,8 @@ const useValidateSignUp = () => {
     form,
     error,
     pending,
+    handleGithubSignUp,
+    handleGoogleSignUp,
   }
 }
 
