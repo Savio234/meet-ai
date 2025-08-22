@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { Button} from "../../shared";
-import SignUp from "../AuthenticationPages/SignUp/SignUp";
 import { useValidateSignUp } from "../../hooks";
+import SignUp from "../AuthenticationPages/SignUp/SignUp";
 
 const Home = () => {
     const { session, handleSignOut } = useValidateSignUp();
