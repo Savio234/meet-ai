@@ -106,7 +106,7 @@ const Login = () => {
                     md:flex flex-col gap-y-4 items-center justify-center"
                 >
                     <div className="relative w-[6rem] h-[6rem]">
-                        <Image src="/svgs/logo.svg" alt="Logo" fill />
+                        <Image src="/svgs/logo.svg" alt="Logo" fill priority />
                     </div>
                     <p className="text-2xl font-semibold text-white">
                         Meet.AI

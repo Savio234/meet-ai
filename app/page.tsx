@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { auth } from "../lib/auth";
 import { redirect } from "next/navigation";
 import { HomeView } from "../views";
+import DashboardLayout from "./(dashboard)/layout";
 
 const Home = async () => {
   const session = await auth.api.getSession({
@@ -11,6 +12,10 @@ const Home = async () => {
   if (!session) {
     redirect("/login");
   }
-  return <HomeView />;
+  return (
+    <DashboardLayout>
+      <HomeView />
+    </DashboardLayout>
+  );
 }
 export default Home;
