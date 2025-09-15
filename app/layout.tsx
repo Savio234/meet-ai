@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Meet AI",
-  description: "",
+  description: `An innovative SaaS platform for building and deploying intelligent AI agents. 
+  Powered by Next.js, React, and cutting-edge authentication solutions.`,
 };
 
 export default function RootLayout({
