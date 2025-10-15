@@ -1,3 +1,4 @@
+import DashboardUserButton from "./DashboardUserButton/DashboardUserButton";
 import { Alert, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
@@ -11,6 +12,7 @@ import { Sidebar, SidebarProvider, SidebarContent, SidebarFooter, SidebarGroup,
 
 export {
     Alert,
+    DashboardUserButton,
     AlertTitle,
     Button,
     Card,

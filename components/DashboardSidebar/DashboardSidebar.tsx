@@ -2,14 +2,18 @@
 import React from "react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup,
     SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton,
-    SidebarMenuItem, Separator
+    SidebarMenuItem, Separator,
+    DashboardUserButton
 } from '../../shared';
 import { dashboardItemsProps } from "../../interface/dashboard";
 import { BotIcon, StarIcon, VideoIcon } from "lucide-react";
+import { cn } from "../../lib/utils";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
 const DashboardSidebar = () => {
+    const pathname = usePathname();
     const dashboardItems: dashboardItemsProps[] = [
         { label: 'Meetings', icon: VideoIcon, href: '/meetings' },
         { label: 'Agents', icon: BotIcon, href: '/agents' },
@@ -27,7 +31,6 @@ const DashboardSidebar = () => {
         </SidebarHeader>
         <div className="px-4 py-2">
             <Separator className="opacity-10 text-[#5D6B68]" />
-            <p className="text-sm text-muted-foreground">Dashboard</p>
         </div>
         <SidebarContent>
             <SidebarGroup>
@@ -35,7 +38,42 @@ const DashboardSidebar = () => {
                     <SidebarMenu>
                         {dashboardItems.slice(0, 2).map((item: dashboardItemsProps, index: number) => (
                             <SidebarMenuItem key={index}>
-                                <SidebarMenuButton>
+                                <SidebarMenuButton asChild
+                                    className={cn(`h-10 hover:bg-linear-to-r/oklch
+                                        border border-transparent hover:border-[#5D6B68]/10
+                                        from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50`,
+                                        pathname === item.href && `bg-linear-to-r/oklch border-[#5D6B68]/10`
+                                    )}
+                                    isActive={pathname === item.href}
+                                >
+                                    <Link href={item.href} className="flex items-center gap-2">
+                                        <item.icon className="size-5" />
+                                        <span className="text-sm font-medium tracking-tight">
+                                            {item.label}
+                                        </span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </SidebarGroupContent>
+            </SidebarGroup>
+            <div className="px-4 py-2">
+                <Separator className="opacity-10 text-[#5D6B68]" />
+            </div>
+            <SidebarGroup>
+                <SidebarGroupContent>
+                    <SidebarMenu>
+                        {dashboardItems.slice(2).map((item: dashboardItemsProps, index: number) => (
+                            <SidebarMenuItem key={index}>
+                                <SidebarMenuButton asChild
+                                    className={cn(`h-10 hover:bg-linear-to-r/oklch
+                                        border border-transparent hover:border-[#5D6B68]/10
+                                        from-sidebar-accent from-5% via-30% via-sidebar/50 to-sidebar/50`,
+                                        pathname === item.href && `bg-linear-to-r/oklch border-[#5D6B68]/10`
+                                    )}
+                                    isActive={pathname === item.href}
+                                >
                                     <Link href={item.href} className="flex items-center gap-2">
                                         <item.icon className="size-5" />
                                         <span className="text-sm font-medium tracking-tight">
@@ -50,6 +88,7 @@ const DashboardSidebar = () => {
             </SidebarGroup>
         </SidebarContent>
         <SidebarFooter className="text-center">
+            <DashboardUserButton />
             &copy; {new Date().getFullYear()} Meet AI
         </SidebarFooter>
     </Sidebar>
