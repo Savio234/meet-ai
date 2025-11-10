@@ -60,7 +60,9 @@ const Login = () => {
                                     <AlertTitle>{error}</AlertTitle>
                                 </Alert>
                             )}
-                            <Button disabled={pending} className="w-full h-[2.8rem] md:h-[3.5rem] bg-green-700 font-black" type="submit">
+                            <Button disabled={pending} type="submit"
+                                className="w-full cursor-pointer h-[2.8rem] md:h-[3.5rem] bg-green-700 font-black" 
+                            >
                                 Login
                             </Button>
                             <div className="after:border-border relative text-center text-sm after:absolute
@@ -73,12 +75,12 @@ const Login = () => {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <Button onClick={handleGoogleLogin} disabled={pending} variant="outline"
-                                    type="button" className="w-full"
+                                    type="button" className="w-full cursor-pointer"
                                 >
                                     <FaGoogle />
                                 </Button>
                                 <Button onClick={handleGithubLogin} disabled={pending} variant="outline"
-                                    type="button" className="w-full"
+                                    type="button" className="w-full cursor-pointer"
                                 >
                                     <FaGithub />
                                 </Button>
